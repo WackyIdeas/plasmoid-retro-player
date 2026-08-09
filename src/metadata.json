@@ -1,0 +1,29 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Authors": [
+            {
+                "Email": "wackyideas@disroot.org",
+                "Name": "WackyIdeas"
+            }
+        ],
+        "Category": "Multimedia",
+        "Description": "A media controller based on the Rainmeter skin retroTunes by shev-the-dev",
+        "EnabledByDefault": true,
+        "FormFactors": [
+            "tablet",
+            "handset",
+            "desktop"
+        ],
+        "Icon": "applications-multimedia",
+        "Id": "com.github.wackyideas.retroplayer",
+        "License": "GPL-2.0+",
+        "Name": "Retro player",
+        "Website": "https://www.deviantart.com/shev-the-dev/art/retroTunes-147210621"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-DBusActivationService": "org.mpris.MediaPlayer2.*",
+    "X-Plasma-Provides": [
+        "org.kde.plasma.multimediacontrols"
+    ]
+}
