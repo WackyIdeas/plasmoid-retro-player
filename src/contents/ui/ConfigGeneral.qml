@@ -18,6 +18,7 @@ KCM.SimpleKCM {
 
     property alias cfg_colorizeVinyl: colorizeVinyl.checked
     property alias cfg_rotationSpeed: rotationSpeed.currentIndex
+    property alias cfg_rotateWhenMaximized: rotateWhenMaximized.checked
 
     component CustomGroupBox: GroupBox {
         id: gbox
@@ -73,6 +74,10 @@ KCM.SimpleKCM {
                         ]
                         currentIndex: Plasmoid.configuration.rotationSpeed
                     }
+                }
+                CheckBox {
+                    id: rotateWhenMaximized
+                    text: i18n("Rotate record even when maximized windows are shown")
                 }
             }
 

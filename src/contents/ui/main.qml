@@ -10,6 +10,9 @@ import org.kde.ksvg as KSvg
 import org.kde.kirigami as Kirigami
 import org.kde.plasma.private.mpris as Mpris
 
+import org.kde.plasma.wallpapers.image as PlasmaWallpaper
+import org.kde.kwindowsystem
+
 PlasmoidItem {
     id: root
 
@@ -21,6 +24,7 @@ PlasmoidItem {
 
     readonly property bool mediaActive: (mediaController.mediaPlayerOpen && mediaController.playbackStatus > Mpris.PlaybackStatus.Stopped) &&
                                         !(mediaController.playbackStatus === Mpris.PlaybackStatus.Paused && mediaController.track === "" && mediaController.artist === "" && mediaController.album === "" && mediaController.albumArt === "" && !mediaController.canQuit)
+
     Plasmoid.backgroundHints: "NoBackground";
 
     property int lastUsedIndex: -1
@@ -30,6 +34,13 @@ PlasmoidItem {
     Layout.minimumHeight: 195
     Layout.maximumWidth: 214
     Layout.maximumHeight: 195
+
+
+
+    PlasmaWallpaper.MaximizedWindowMonitor {
+        id: activeWindowMonitor
+        regionGeometry: root.screenGeometry //animatedImageComponent.desktopRect
+    }
 
     MprisController { id: mediaController }
 
@@ -93,7 +104,7 @@ PlasmoidItem {
             anchors.top: parent.top
             anchors.left: parent.left
             anchors.topMargin: 5
-            rotating: mediaController.isPlaying
+            rotating: mediaController.isPlaying && (!(activeWindowMonitor.count > 0 && !KWindowSystem.showingDesktop) || Plasmoid.configuration.rotateWhenMaximized)
             canColorize: root.coverArt != "" && discColorization.valid
             discColorization: {
                 if (mediaController.albumArt === "") return "";
