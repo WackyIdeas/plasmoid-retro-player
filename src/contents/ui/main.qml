@@ -39,7 +39,7 @@ PlasmoidItem {
 
     PlasmaWallpaper.MaximizedWindowMonitor {
         id: activeWindowMonitor
-        regionGeometry: root.screenGeometry //animatedImageComponent.desktopRect
+        regionGeometry: root.screenGeometry
     }
 
     MprisController { id: mediaController }
@@ -84,9 +84,6 @@ PlasmoidItem {
      * the colors as the album art changes.
      */
     property var coverArt: mediaController.albumArt
-    onCoverArtChanged: {
-        albumArtColor.update();
-    }
 
     Kirigami.ImageColors {
         id: albumArtColor
@@ -105,12 +102,18 @@ PlasmoidItem {
             anchors.left: parent.left
             anchors.topMargin: 5
             rotating: mediaController.isPlaying && (!(activeWindowMonitor.count > 0 && !KWindowSystem.showingDesktop) || Plasmoid.configuration.rotateWhenMaximized)
-            canColorize: root.coverArt != "" && discColorization.valid
+            canColorize: discColorization.valid
             discColorization: {
-                if (mediaController.albumArt === "") return "";
+                if (mediaController.albumArt === "") {
+                    return "";
+                }
                 var col = albumArtColor.dominant;
-                if (col.hsvSaturation < 0.3) return "";
-                if (col.hsvValue < 0.3) return "";
+                if (col.hsvSaturation < 0.2) {
+                    return "";
+                }
+                if (col.hsvValue < 0.2) {
+                    return "";
+                }
                 return col;
             }
         }
@@ -121,6 +124,16 @@ PlasmoidItem {
             anchors.right: parent.right
             active: root.mediaActive
             mprisController: mediaController
+            onCoverChanged: {
+                coverUpdater.start()
+            }
+            Timer {
+                id: coverUpdater
+                interval: 50
+                onTriggered: {
+                    albumArtColor.update();
+                }
+            }
         }
         MouseArea {
             anchors.fill: vinyl
@@ -128,9 +141,6 @@ PlasmoidItem {
             acceptedButtons: Qt.RightButton
             onClicked: mouse => {
                 contextMenu.open(mouse.x, mouse.y);
-                console.log(vinyl.discColorization.valid && root.coverArt != "");
-                console.log(root.coverArt != "")
-                console.log(vinyl.discColorization.valid)
             }
         }
 
@@ -146,6 +156,7 @@ PlasmoidItem {
     }
     Component.onCompleted: {
         refresh.start()
+        coverUpdater.start()
     }
 
 }

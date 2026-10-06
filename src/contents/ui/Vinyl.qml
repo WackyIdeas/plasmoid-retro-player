@@ -15,7 +15,7 @@ Item {
 
     id: vinyl
     property bool rotating: false
-    property var discColorization: ""
+    property color discColorization
 
     property bool canColorize: false
 

@@ -17,6 +17,8 @@ Item {
     width: 211
     height: 195
 
+    signal coverChanged
+
     property bool active: false
     property var mprisController: null
     property alias albumCover: cover
@@ -34,6 +36,12 @@ Item {
             rightMargin: 5
         }
         source: mprisController?.albumArt == "" ? Qt.resolvedUrl("img/missing.png") : mprisController?.albumArt
+        onSourceChanged: {
+            coverChanged();
+        }
+        onStatusChanged: {
+            coverChanged();
+        }
         smooth: true
         mipmap: true
 
